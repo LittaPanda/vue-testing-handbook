@@ -12,15 +12,14 @@
     </a>
     <br />
     <div class="info">
-      <small>
-      Hi! Please check out my
-      <a href="https://vuejs-course.com/" target="_blank">upcoming</a>
-      <a href="https://vuejs-course.com/" target="_blank">course</a>
-      <a href="https://vuejs-course.com/" target="_blank">on</a>
-      <a href="https://vuejs-course.com/" target="_blank">Vue.js 3</a>,
-      including the Composition API,
-      TypeScript, and Unit Testing.
-      </small>
+        <small>
+            {{ $localeConfig.vue3AnnouncementFirst }}
+            <a href="https://vuejs-course.com/" target="_blank">{{ $localeConfig.vue3AnnouncementLink1 }}</a>
+            <a href="https://vuejs-course.com/" target="_blank">{{ $localeConfig.vue3AnnouncementLink2 }}</a>
+            <a href="https://vuejs-course.com/" target="_blank">{{ $localeConfig.vue3AnnouncementLink3 }}</a>
+            <a href="https://vuejs-course.com/" target="_blank">{{ $localeConfig.vue3AnnouncementLink4 }}</a>
+            {{ $localeConfig.vue3AnnouncementLast }}
+        </small>
     </div>
 
     <!-- https://vuejs-course.com/ -->
