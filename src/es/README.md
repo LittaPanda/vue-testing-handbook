@@ -1,6 +1,6 @@
 ## ¿Qué es esta guía?
 
-¡Bienvenido al manual de pruebas unitarias de Vue.js!
+¡Bienvenido al manual de pruebas para Vue.js!
 
 Esta es una colección de ejemplos breves y centrados sobre cómo probar los componentes de Vue. Utiliza `vue-test-utils`, la biblioteca oficial para probar los componentes de Vue, y Jest, un framework moderno de pruebas. Cubre la API `vue-test-utils`, así como las mejores prácticas para probar componentes.
 

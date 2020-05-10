@@ -60,7 +60,7 @@ module.exports = {
         },
         '/es/': {
             lang: 'es',
-            title: 'Manual de pruebas unitarias de Vue',
+            title: 'Manual de pruebas para Vue',
         },
     },
     themeConfig: {

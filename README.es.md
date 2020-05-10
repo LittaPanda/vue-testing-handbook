@@ -1,8 +1,8 @@
 [English](https://github.com/lmiller1990/vue-testing-handbook#vue-testing-handbook) | [日本語](https://github.com/lmiller1990/vue-testing-handbook/blob/master/src/ja/README.md) | [Русский](https://github.com/webistomin/vue-testing-handbook/blob/master/README.ru.md) | [简体中文](https://github.com/tonylua/vue-testing-handbook/blob/master/README.zh-CN.md) | [Español](https://github.com/LittaPanda/vue-testing-handbook/blob/master/README.es.md)
 
-## Manual de pruebas unitarias para Vue
+## Manual de pruebas para Vue
 
-¡Bienvenido al Manual de pruebas unitarias de Vue!
+¡Bienvenido al Manual de pruebas para Vue!
 
 ## ¿Qué es esto?
 
