@@ -1,22 +1,22 @@
-## Installing vue-cli
+## Instalación de vue-cli
 
-`vue-test-utils` is the official testing library for Vue, and will be used throughout the guide. It runs in both a browser and Node.js environment, and works with any test runner. We will be running our tests in a Node.js environment throughout this guide.
+`vue-test-utils` es la biblioteca oficial de pruebas para Vue, y se utilizará en toda la guía. `vue-test-utils` se ejecuta tanto en un navegador como en un entorno de Node.js, y funciona con cualquier framework de prueba. A lo largo de esta guía, realizaremos nuestras pruebas en un entorno Node.js.
 
-`vue-cli` is the easiest way to get started. It will set up a project, as well as configure Jest, a popular testing framework. Install it by running:
+La forma más fácil de comenzar es utilizando `vue-cli`. Este creará un proyecto, así como también configurará Jest, un framework de pruebas popular. Instale `vue-cli` ejecutando:
 
 ```sh
 yarn global add @vue/cli
 ```
 
-or with npm:
+o con npm:
 
 ```sh
 npm install -g @vue/cli
 ```
 
-Create a new project by running `vue create [project-name]`. Choose "Manually select features" and "Unit Testing", and "Jest" for the test runner.
+Cree un nuevo proyecto con `vue-cli` ejecutando `vue create [nombre-del-proyecto]`. En las opciones de instalación de `vue-cli`, elija "Manually select features (Seleccionar funciones manualmente)", "Unit Testing (Prueba Unitaria)" y "Jest" para el framework de pruebas.
 
-Once the installation finishes, `cd` into the project and run `yarn test:unit`. If everything went well, you should see:
+Una vez que finalice la instalación, `cd` en el proyecto y ejecute el comando `yarn test:unit`. Si todo salió bien, debería ver:
 
 ```
  PASS  tests/unit/HelloWorld.spec.js
@@ -28,18 +28,17 @@ Tests:       1 passed, 1 total
 Snapshots:   0 total
 Time:        2.074s
 ```
+¡Felicitaciones, acaba de realizar su primera prueba satisfactoria!
 
-Congratulations, you just ran your first passing test!
+## Escribiendo su primera prueba
 
-## Writing your first test
+Realizamos una prueba existente que venia con el proyecto. Vamos a ensuciarnos las manos y escribir nuestro propio componente junto con una prueba. Tradicionalmente, al hacer TDD (Desarrollo Impulsado por Pruebas, por sus siglas en inglés), primero se escribe la prueba fallida, luego se implementa el código que permite que la prueba pase. Por ahora, escribiremos el componente primero.
 
-We ran an existing test that came with the project. Let's get our hands dirty, writing our own component, and a test. Traditionally when doing TDD, you write the failing test first, then implement the code which allows the test to pass. For now, we will write the component first.
+Ya no necesitamos `src/components/HelloWorld.vue` ni `tests/unit/HelloWorld.spec.js`, por lo que puede eliminarlos.
 
-We don't need `src/components/HelloWorld.vue` or `tests/unit/HelloWorld.spec.js` anymore, so you can delete those.
+## Crear el componente `Saludo`
 
-## Creating the `Greeting` component
-
-Create a `Greeting.vue` file in `src/components`. Inside `Greeting.vue`, add the following:
+Cree un archivo `Greeting.vue` en` src/components`. Dentro de `Greeting.vue`, agregue lo siguiente:
 
 ```vue
 <template>
@@ -54,21 +53,21 @@ export default {
 
   data() {
     return {
-      greeting: "Vue and TDD"
+      greeting: "Vue y TDD"
     }
   }
 }
 </script>
 ```
 
-## Writing the test
+## Escribiendo la prueba
 
-`Greeting` has only one responsibility - to render the `greeting` value. The strategy will be:
+`Greeting` (saludo en inglés) solo tiene una responsabilidad: representar el valor de `greeting` (`Vue y TDD` en este caso). La estrategia que utilizaremos será la siguiente:
 
-1. render the component with `mount`
-2. assert that the component's text contains "Vue and TDD"
+1. Interpretar el componente con `mount`
+2. Afirmar que el texto del componente contiene "Vue y TDD"
 
-Create a `Greeting.spec.js` inside `tests/unit`. Inside, import `Greeting.vue`, as well as `mount`, and add the outline of the test:
+Cree un `Greeting.spec.js` dentro de` tests/unit`. En el interior, importe el componente `Greeting.vue`, así como `mount`, y agregue el esquema de la prueba:
 
 ```
 import { mount } from '@vue/test-utils'
@@ -81,9 +80,9 @@ describe('Greeting.vue', () => {
 })
 ```
 
-There are different syntaxes used for TDD, we will use the commonly seen `describe` and `it` syntax that comes with Jest. `describe` generally outlines what the test is about, in this case `Greeting.vue`. `it` represents a single piece of responsibility that the subject of the test should fulfill. As we add more features to the component, we add more `it` blocks.
+Existen diferentes sintaxis utilizadas para TDD, utilizaremos la sintaxis comúnmente vista `describe` e `it` que vienen incluidas con Jest. `describe` generalmente describe de qué se trata la prueba, en este caso describe el componente `Greeting.vue`. `it` representa una única responsabilidad que la prueba debe cumplir. A medida que agregamos más funciones al componente, agregamos más bloques `it`.
 
-Now we should render the component with `mount`. The standard practice is to assign the component to a variable called `wrapper`. We will also print the output, to make sure everything is running correctly:
+Ahora deberíamos interpretar el componente con `mount`. La práctica estándar es asignar el componente a una variable llamada `wrapper`. También imprimiremos el marcado html del componente para asegurarnos de que todo esté funcionando correctamente:
 
 ```js
 const wrapper = mount(Greeting)
@@ -91,9 +90,9 @@ const wrapper = mount(Greeting)
 console.log(wrapper.html())
 ```
 
-## Running the test
+## Ejecutando la prueba
 
-Run the test by typing `yarn test:unit` into your terminal. Any file in the `tests` directory ending with `.spec.js` is automatically executed. If everything went well, you should see:
+Ejecute la prueba escribiendo `yarn test: unit` en su terminal. Cualquier archivo en el directorio `tests` que termine con `.spec.js` se ejecuta automáticamente gracias a `vue-cli`. Si todo salió bien, debería ver:
 
 ```
 PASS  tests/unit/Greeting.spec.js
@@ -102,29 +101,29 @@ Greeting.vue
 
 console.log tests/unit/Greeting.spec.js:7
   <div>
-    Vue and TDD
+    Vue y TDD
   </div>
 ```
 
-We can see the markup is correct, and the test passes. The test is passing because there was no failure - this test can never fail, so it is not very useful yet. Even if we change `Greeting.vue` and delete the `greeting` from the template, it will still pass. Let's change that.
+Podemos ver que el marcado html es correcto y la prueba pasa. La prueba está pasando porque no hubo falla; esta prueba nunca puede fallar, por lo que aún no es muy útil. Incluso si cambiamos `Greeting.vue` y eliminamos `greeting` de la plantilla, la prueba todavía pasará. Arreglemos eso.
 
-## Making assertions
+## Hacer afirmaciones
 
-We need to make an assertion to ensure the component is behaving correctly. We can do that using Jest's `expect` API. It looks like this: `expect(result).to [matcher] (actual)`. 
+Necesitamos hacer una afirmación para asegurar que el componente se esté comportando correctamente. Podemos hacer eso utilizando la API de Jest usando `expect` (esperar en inglés). Lo anterior lo podemos escribir de la siguiente manera: `expect(resultado) .to [matcher] (actual)`.
 
-_Matchers_ are methods to compare values and objects. For example:
+_Matchers_ (en inglés) son métodos para comparar valores y objetos. Por ejemplo:
 
 ```js
 expect(1).toBe(1)
 ```
 
-A full list of matchers is available in the [Jest documentation](http://jestjs.io/docs/en/expect). `vue-test-utils` doesn't include any matchers - the ones Jest provides are more than enough. We want to compare the text from `Greeting`. We could write:
+Una lista completa de matchers está disponible en la [documentación de Jest] (http://jestjs.io/docs/en/expect). `vue-test-utils` no incluye ningún matcher, los que Jest proporciona son más que suficientes. En este caso, queremos comparar el texto de el componente `Greeting`. Podríamos escribir:
 
 ```js
-expect(wrapper.html().includes("Vue and TDD")).toBe(true)
+expect(wrapper.html().includes("Vue y TDD")).toBe(true)
 ```
 
-but `vue-test-utils` has an even better way to get the markup - `wrapper.text`. Let's finish the test off:
+Lo anterior funciona, pero `vue-test-utils` tiene una forma aún mejor de obtener y comparar las marcas de html, o el texto en este caso: ` wrapper.text`. Ahora terminemos la prueba:
 
 ```js
 import { mount } from '@vue/test-utils'
@@ -134,12 +133,12 @@ describe('Greeting.vue', () => {
   it('renders a greeting', () => {
     const wrapper = mount(Greeting)
 
-    expect(wrapper.text()).toMatch("Vue and TDD")
+    expect(wrapper.text()).toMatch("Vue y TDD")
   })
 })
 ```
 
-We don't need the `console.log` anymore, so you can delete that. Run the tests with `yarn unit:test`, and if everything went well you should get:
+Ya no necesitamos imprimir el marcado a la consola con `console.log`, por lo que puede eliminarlo. Ejecute las pruebas con `yarn unit:test`, y si todo salió bien debería obtener:
 
 ```
 PASS  tests/unit/Greeting.spec.js
@@ -152,7 +151,7 @@ Snapshots:   0 total
 Time:        1.477s, estimated 2s
 ```
 
-Looking good. But you should always see a test fail, then pass, to make sure it's really working. In traditional TDD, you would write the test before the actual implementation, see it fail, then use the failing errors to guide your code. Let's make sure this test is really working. Update `Greeting.vue`:
+Por el momento todo se ve bien. Pero siempre debe ver que una prueba falle, y luego hacerla pasar para asegurarse de que esta realmente funcione. En el TDD tradicional, se debe escribir la prueba antes de escribir el código de implementación; debe ver que la prueba falle para luego usar los errores de la falla para guiar la implementación de su código. Asegurémonos de que ésta prueba realmente funcione. Actualice `Greeting.vue`:
 
 ```vue
 <template>
@@ -167,14 +166,14 @@ export default {
 
   data() {
     return {
-      greeting: "Vue without TDD"
+      greeting: "Vue sin TDD"
     }
   }
 }
 </script>
-```
+``` 
 
-And now run the test with `yarn test:unit`:
+Y ahora ejecute la prueba con `yarn test: unit`:
 
 ```
 FAIL  tests/unit/Greeting.spec.js
@@ -186,13 +185,13 @@ Greeting.vue
   expect(received).toMatch(expected)
 
   Expected value to match:
-    "Vue and TDD"
+    "Vue y TDD"
   Received:
-    "Vue without TDD"
+    "Vue sin TDD"
 
      6 |     const wrapper = mount(Greeting)
      7 |
-  >  8 |     expect(wrapper.text()).toMatch("Vue and TDD")
+  >  8 |     expect(wrapper.text()).toMatch("Vue y TDD")
        |                            ^
      9 |   })
     10 | })
@@ -201,6 +200,6 @@ Greeting.vue
     at Object.<anonymous> (tests/unit/Greeting.spec.js:8:28)
 ```
 
-Jest gives us good feedback. We can see the expected and actual result, as well as on which line the expectation failed. The test did fail, as expected. Revert `Greeting.vue` and make sure the test is passing again.
+Jest nos da buena retroalimentación. Podemos ver el resultado esperado y el resultado actual, así como en qué línea falló la afirmación. En este caso, la prueba falló, tal y como se esperaba. Revierta `Greeting.vue` a su estado anterior y asegúrese de que la prueba esté pasando nuevamente.
 
-Next we will look at the two methods `vue-test-utils` provides to render components: `mount` and `shallowMount`.
+A continuación, veremos los dos métodos que `vue-test-utils` proporciona para interpretar componentes: `mount` y `shallowMount`.
