@@ -92,7 +92,7 @@ console.log(wrapper.html())
 
 ## Ejecutando la prueba
 
-Ejecute la prueba escribiendo `yarn test: unit` en su terminal. Cualquier archivo en el directorio `tests` que termine con `.spec.js` se ejecuta automáticamente gracias a `vue-cli`. Si todo salió bien, debería ver:
+Ejecute la prueba escribiendo `yarn test:unit` en su terminal. Cualquier archivo en el directorio `tests` que termine con `.spec.js` se ejecuta automáticamente gracias a `vue-cli`. Si todo salió bien, debería ver:
 
 ```
 PASS  tests/unit/Greeting.spec.js
@@ -123,7 +123,7 @@ Una lista completa de matchers está disponible en la [documentación de Jest] (
 expect(wrapper.html().includes("Vue y TDD")).toBe(true)
 ```
 
-Lo anterior funciona, pero `vue-test-utils` tiene una forma aún mejor de obtener y comparar las marcas de html, o el texto en este caso: ` wrapper.text`. Ahora terminemos la prueba:
+Lo anterior funciona, pero `vue-test-utils` tiene una forma aún mejor de obtener y comparar las marcas de html, o el texto en este caso: `wrapper.text`. Ahora terminemos la prueba:
 
 ```js
 import { mount } from '@vue/test-utils'
@@ -173,7 +173,7 @@ export default {
 </script>
 ``` 
 
-Y ahora ejecute la prueba con `yarn test: unit`:
+Y ahora ejecute la prueba con `yarn test:unit`:
 
 ```
 FAIL  tests/unit/Greeting.spec.js
