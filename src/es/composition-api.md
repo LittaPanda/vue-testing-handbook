@@ -1,14 +1,14 @@
-## The Composition API
+## Composition API (API de composición)
 
-Vue 3 will introduce a new API for create components - the [Composition API](https://vue-composition-api-rfc.netlify.com/#basic-example). To allow users to try it out and get feedback, the Vue team released a plugin that lets us try it out in Vue 2. You can find it [here](https://github.com/vuejs/composition-api).
+Vue 3 introducirá una nueva API para crear componentes - el API de composición o [Composition API](https://vue-composition-api-rfc.netlify.com/#basic-example). Para permitir a los usuarios probarla y obtener feedback, el equipo de Vue ha publicado un plugin que nos permite probarla en Vue 2. Lo puedes encontrar [aquí](https://github.com/vuejs/composition-api). 
 
-Testing a component build with the Composition API should be no different to testing a standard component, since we are not testing the implementation, but the output (*what* the component does, not *how* it does it). This article will show a simple example of a component using the Composition API in Vue 2, and how testing strategies are the same as any other component.
+Probar la construcción de un componente con la Composition API no debería ser diferente a probar un componente estándar, ya que no estamos probando la implementación, sino la salida (*qué* hace el componente, no *cómo* lo hace). Este artículo muestra un ejemplo simple de un componente que utiliza la Composition API en Vue 2, y cómo las estrategias para las pruebas son las mismas que en cualquier otro componente.
 
-The source code for the test described on this page can be found [here](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/CompositionApi.spec.js).
+El código fuente para las pruebas descritas en esta página se puede obtener [aquí](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/CompositionApi.spec.js).
 
-## The Component
+## El componente
 
-Below the "Hello, World" of the Composition API, more or less. If you don't understand something, [read the RFC](https://vue-composition-api-rfc.netlify.com/) or have a Google; there are lots of resources about the Composition API.
+A continuación vemos lo que sería más o menos el "Hola Mundo" de la Composition API. Si no entiendes algo, [lee el RFC](https://vue-composition-api-rfc.netlify.com/) o busca en Google. Hay montones de recursos sobre la Composition API.
 
 ```html
 <template>
@@ -60,15 +60,15 @@ export default {
 </script>
 ```
 
-The two things we will need to test here are:
+Las dos cosas que necesitaremos probar aquí son:
 
-1. Does clicking the increment button increase `state.count` by 1?
+1. ¿Hacer clic sobre el botón "Increment" aumenta `state.count` en 1?
 
-2. Does the message received in the props render correctly (transformed to upper case)?
+2. ¿El mensaje recibido en las props se renderiza correctamente (transformado a mayúsculas)?
 
-## Testing the Props Message
+## Probando el mensaje en las props
 
-Testing the message is correctly rendered is trivial. We just use `propsData` to set the value of the prop, as described [here](/components-with-props.html).
+Probar que el mensaje se renderiza correctamente es trivial. Simplemente usamos `propsData` para darle un valor a la prop, como se describe [aquí](/components-with-props.html).
 
 ```js
 import { mount } from "@vue/test-utils"
@@ -88,11 +88,11 @@ describe("CompositionApi", () => {
 })
 ```
 
-As expected, this is very simple - regardless of the way we are composing out components, we use the same API and same strategies to test. You should be able to change the implementation entirely, and not need to touch the tests. Remember to test outputs (the rendered HTML, usually) based on given inputs (props, triggered events), not the implementation.
+Como es de esperar, esto es muy simple – independientemente de cómo componemos los componentes, usamos la misma API y las mismas estrategias para las pruebas. Deberías ser capaz de cambiar la implementación completamente sin necesidad de tocar las pruebas. Recuerda probar las salidas (el HTML renderizado normalmente) a partir de entradas determinadas (props, eventos lanzados), no la implementación.
 
-## Testing the Button Click
+## Probando el clic en el botón
 
-Writing a test to ensure clicking the button increments the `state.count` is equally simple. Notice the test is marked `async`; read more about why this is required in [Simulating User Input](simulating-user-input.html#writing-the-test).
+Escribir una prueba para asegurarnos de que pulsar el botón incrementa `state.count` es igual de simple. Nótese que la prueba está marcado como `async`; puedes leer más sobre por qué esto es necesario en [Simulando entradas del usuario](simulating-user-input.html#writing-the-test).
 
 ```js
 import { mount } from "@vue/test-utils"
@@ -113,12 +113,12 @@ describe("CompositionApi", () => {
 })
 ```
 
-Again, entirely uninteresting - we `trigger` the click event, and assert that the rendered `count` increased.
+De nuevo, muy poco interesante. Lanzamos el evento `click` mediante `trigger`, y comprobamos que el `count` que se renderiza ha aumentado.
 
-## Conclusion
+## Conclusión
 
-The article demonstrates how testing a component using the Composition API is identical to testing one using the traditional options API. The ideas and concepts are the same. The main point to be learned is when writing tests, make asserions based on inputs and outputs. 
+Este artículo demuestra cómo probar un componente que usa la Composition API es idéntico a probar uno que utiliza el API de opciones tradicional. Las ideas y conceptos son los mismos. El punto principal a aprender es que cuando hacemos tests debemos hacer las comprobaciones a partir de entradas y salidas.
 
-It should be possible to refactor any traditional Vue component to use the Composition API without the need to change the unit tests. If you find yourself needing to change your tests when refactoring, you are likely testing the *implmentation*, not the output. 
+Debería ser posible refactorizar cualquier componente tradicional de Vue para que utilice la Composition API sin necesidad de cambiar las pruebas unitarias. Si te encuentras con la necesidad de cambiar las pruebas al refactorizar, probablemente estés probando la *implementación*, no la salida.
 
-While an exciting new feature, the Composition API is entirely additive, so there is no immediate need to use it, however regardless of your choice, remember a good unit tests asserts the final state of the component, without considering the implementation details.
+Aunque es una nueva funcionalidad atractiva, la Composition API es totalmente aditiva, por lo que no hay una necesidad inmediata de usarla. Sin embargo, independientemente de tu elección, recuerda que una buena prueba unitaria comprueba el estado final del componente, sin tener en cuenta los detalles de implementación.
