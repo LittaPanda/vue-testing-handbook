@@ -1,14 +1,14 @@
-## Finding Elements
+## Localizando elementos
 
-`vue-test-utils` provides a number of ways to find and assert the presence of html elements or other Vue components using the `find` method. The main use of `find` is asserting a component correctly renders an element or child component.
+`vue-test-utils` proporciona varias formas de encontrar y comprobar la presencia de elementos HTML u otros componentes de Vue mediante el uso del método `find`. La función principal de `find` es comprobar que un componente renderiza correctamente un elemento o un componente hijo.
 
-The source code for the test described on this page can be found [here](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/Parent.spec.js).
+El código fuente para la prueba descrita en esta página se puede encontrar [aquí](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/Parent.spec.js).
 
-## Creating the Components
+## Creando los componentes
 
-For this example, we will create a `<Child>` and `<Parent>` component.
+Para este ejemplo, crearemos un componente `<Child>` (hijo) y `<Parent>` (padre).
 
-Child: 
+`Child`: 
 
 ```vue
 <template>
@@ -22,7 +22,7 @@ export default {
 </script>
 ```
 
-Parent:
+`Parent`:
 
 ```vue
 <template>
@@ -52,9 +52,9 @@ export default {
 </script>
 ```
 
-## `find` with `querySelector` syntax
+## `find` con sintaxis `querySelector`
 
-Regular elements can easily be selected using the syntax used with `document.querySelector`. `vue-test-utils` also provides a `isVisible` method to check if elements conditionally rendered with `v-show` are visible. Create a `Parent.spec.js`, and inside add the following test:
+Los elementos normales se pueden seleccionar fácilmente usando la sintaxis usada con `document.querySelector`. `vue-test-utils` también proporciona un método `isVisible` para comprobar si elementos renderizados condicionalmente con `v-show` son visibles. Crea un archivo `Parent.spec.js`, y dentro añade el siguiente test:
 
 ```js
 import { mount } from "@vue/test-utils"
@@ -69,7 +69,7 @@ describe("Parent", () => {
 })
 ```
 
-Since `v-show="showSpan"` defaults to `false`, we expect the found `<span>` element's `isVisible` method to return `false`. The tests passes when run with `yarn test:unit`. Next, a test around the case when `showSpan` is `true`.
+Como `v-show="showSpan"` es `false` por defecto, esperamos que el método `isVisible` para el elemento `<span>` devuelva `false`. La prueba pasa cuando la lanzamos con `yarn test:unit`. A continuación veremos una prueba para cuando `showSpan` es `true`.
 
 ```js
 it("does render a span", () => {
@@ -83,16 +83,16 @@ it("does render a span", () => {
 })
 ```
 
-It passes! Much like `isVisible` for `v-show`, `vue-test-utils` provides an `exists` method to be used when testing elements conditionally rendered using `v-if`.
+Y pasa! De modo muy similar a `isVisible` para `v-show`, `vue-test-utils` proporciona un método `exists` para ser usado cuando probamos elementos renderizados condicionalmente usando `v-if`.
 
-## Finding Components with `name` and `Component`
+## Encontrando componentes con `name` y `Component`
 
-Finding child components is a little different to finding regular HTML elements. There two main ways to assert the presence of child Vue components:
+Encontrar componentes hijos es un poco diferente a encontrar elementos HTML normales. Existen dos formas principales de comprobar la presencia de componentes de Vue hijos:
 
 1. `find(Component)`
 2. `find({ name: "ComponentName" })`
 
-These are a bit easier to understand in the context of an example test. Let's start with the `find(Component)` syntax. This requires us to `import` the component, and pass it to the `find` function.
+Estos son un poco más fáciles de entender en el contexto de una prueba de ejemplo. Empecemos con la sintaxis `find(Component)`. Esto requiere que importemos el componente, y que lo pasemos a la función `find`.
 
 ```js
 import Child from "@/components/Child.vue"
@@ -104,9 +104,9 @@ it("does not render a Child component", () => {
 })
 ```
 
-The implementation for `find` is quite complex, since it works with the `querySelector` syntax, as well as several other syntaxes. You can see the part of the source that finds children Vue components [here](https://github.com/vuejs/vue-test-utils/blob/dev/packages/test-utils/src/find.js). It basically checks the component's `name` against each child rendered, and then checks the `constructor`, and some other properties. 
+La implementación de `find` es bastante compleja, ya que funciona con la sintaxis de `querySelector`, así como con varias sintaxis más. Puedes ver parte del código fuente que encuentra comonentes de Vue hijos [aquí](https://github.com/vuejs/vue-test-utils/blob/dev/packages/test-utils/src/find.js). Básicamente comprueba el nombre (`name`) del componente contra cualquier hijo renderizado, y luego comprueba el `constructor`, y algunas otras propiedades.
 
-As mentioned in the previous paragraph, the `name` property is one of the checks done by `find` when you pass a component. Instead of passing the component, you can simply pass an object with the correct `name` property. This means you do not need to `import` the component. Let's test the case when `<Child>` should be rendered:
+Como se menciona en el párrafo anterior, la propiedad `name` es una de las comprobaciones hechas por `find` cuando pasas un componente. En lugar de pasar el componente, puedes símplemente pasar un objeto con la propiedad `name` correcta. De este modo no necesitas importar el componente. Vamos a probar el caso en el que `<Child>` debería ser renderizado:
 
 ```js
 it("renders a Child component", () => {
@@ -120,13 +120,13 @@ it("renders a Child component", () => {
 })
 ```
 
-It passes! Using the `name` property can be a little unintuitive, so importing the actual component is an alternative. Another option is to simply add a `class` or `id` and query using the `querySelector` style syntax presented in the first two examples.
+Pasa! Usar la propiedad `name` puede ser poco intuitivo, por lo que importar el propio componente es una alternativa. Otra opción es símplemente añadir una `class` o `id` y buscar usando la sintaxis tipo `querySelector` presentada en los dos primeros ejemplos.
 
 ## `findAll`
 
-There are often cases when you want to assert that a number of elements are rendered. A common case is a list of items rendered with `v-for`. Here is a `<ParentWithManyChildren>` that renders several `<Child>` components.
+A menudo, hay caso en los que queremos comprobar que una cierta cantidad de elementos se renderizan. Un ejemplo común es una lista de elementos renderizados con `v-for`. A continuación tenemos un `<ParentWithManyChildren>` (padre con varios hijos) que renderiza varios componentes `<Child>` (hijo).
 
-```js
+```vue
 <template>
   <div>
     <Child v-for="id in [1, 2 ,3]" :key="id" />
@@ -144,7 +144,7 @@ export default {
 </script>
 ```
 
-We can write a test using `findAll` to assert three `<Child>` components are rendered like this:
+Podemos escribir una prueba usando `findAll` para comprobar que tres componentes `<Child>` se han renderizado de la siguiente forma:
 
 ```js
 it("renders many children", () => {
@@ -154,15 +154,14 @@ it("renders many children", () => {
 })
 ```
 
-Running `yarn test:unit` shows the test passes. You can use the `querySelector` syntax with `findAll` as well.
+Ejecutar `yarn test:unit` muestra que la prueba pasa. Puedes usar la sintaxis `querySelector` con `findAll` también.
 
-## Conclusion
+## Conclusión
 
-This page covers:
+Esta página cubre:
 
-- using `find` and `findAll` with the `querySelector` syntax
-- `isVisible` and `exists`
-- using `find` and `findAll` with a component or name as the selector
+- usar `find` y `findAll` con la sintaxis de `querySelector`
+- `isVisible` y `exists`
+- usar `find` y `findAll` con un componente o su nombre como selector
 
-The source code for the test described on this page can be found [here](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/Parent.spec.js).
-
+El código fuente para las pruebas descritas en esta página se encuentra [aquí](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/Parent.spec.js).
