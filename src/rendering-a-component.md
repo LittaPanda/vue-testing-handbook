@@ -1,3 +1,7 @@
+:::tip This book is written for Vue.js 2 and Vue Test Utils v1.
+Find the Vue.js 3 version [here](/v3/).
+:::
+
 ## Two ways to render
 
 `vue-test-utils` provides two ways to render, or __mount__ a component - `mount` and `shallowMount`. A component mounted using either of these methods returns a `wrapper`, which is an object containing the Vue component, plus some useful methods for testing.
@@ -74,3 +78,5 @@ This can be useful. Imagine you want to test your `App.vue` component, that look
 And we want to test `<h1>My Vue App</h1>`  is rendered correctly. We also have a `<fetch-data>` component, that makes a request to an external API in its `mounted` lifecycle hook. 
 
 If we use `mount`, although all we want to do is assert some text is rendered, `<fetch-data />` will make an API request. This will make our test slow and prone to failure. So, we stub out external dependencies. By using `shallowMount`, `<fetch-data />` will be replaced with a `<vuecomponent-stub />`, and the API call will not be initiated.
+
+As a rule of thumb, you should try to use `mount`, since that will more closely resemble your components and how they will appear in a real environment. That said, if you are having trouble with many API requests firing, or supplying the necessary dependencies to render your component, you can use `shallowMount`.:

@@ -1,3 +1,7 @@
+:::tip This book is written for Vue.js 2 and Vue Test Utils v1.
+Find the Vue.js 3 version [here](/v3/).
+:::
+
 ## Vue Router
 
 Since a router usually involves multiple components operating together, often routing tests take place further up the [testing pyramid](https://medium.freecodecamp.org/the-front-end-test-pyramid-rethink-your-testing-3b343c2bca51), right up at the e2e/integration test level. However, having some unit tests around your routing can be beneficial as well.
@@ -95,7 +99,7 @@ describe("App", () => {
     router.push("/nested-route")
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.find(NestedRoute).exists()).toBe(true)
+    expect(wrapper.findComponent(NestedRoute).exists()).toBe(true)
   })
 })
 ```
@@ -129,7 +133,7 @@ describe("App", () => {
     router.push("/nested-route")
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.find(NestedRoute).exists()).toBe(true)
+    expect(wrapper.findComponent(NestedRoute).exists()).toBe(true)
   });
 
   it("should have a different route that /nested-route", async () => {
@@ -139,7 +143,7 @@ describe("App", () => {
       router
     })
     // This test will fail because we are still on the /nested-route
-    expect(wrapper.find(NestedRoute).exists()).toBe(false)
+    expect(wrapper.findComponent(NestedRoute).exists()).toBe(false)
     console.log(router.currentRoute)
   })
 })

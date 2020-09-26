@@ -1,3 +1,7 @@
+:::tip This book is written for Vue.js 2 and Vue Test Utils v1.
+Find the Vue.js 3 version [here](/v3/).
+:::
+
 ## Stubbing components
 
 You can find the test described on this page [here](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/ParentWithAPICallChild.spec.js).
@@ -146,7 +150,7 @@ it('renders with shallowMount and does not initialize API call', () => {
 })
 ```
 
-Running `yarn test:unit` doesn't show any `console.log`, and test passes. `shallowMount` automatically stubbed `<ComponentWithAsyncCall>`. `shallowMount` is useful for testing components that have a lot of child components, that might have behavior triggered in lifecycle hooks such as `created` or `mounted`, as so on. I tend to use `shallowMount` by default, unless I have a good reason to use `mount`. It depends on your use case, and what you are testing.
+Running `yarn test:unit` doesn't show any `console.log`, and test passes. `shallowMount` automatically stubbed `<ComponentWithAsyncCall>`. `shallowMount` is useful for testing components that have a lot of child components, that might have behavior triggered in lifecycle hooks such as `created` or `mounted`, as so on. I tend to use `mount` by default, unless I have a good reason to use `shallowMount`. It depends on your use case, and what you are testing. Try to do whatever is closest to how your components will be used in production.
 
 ## Conclusion
 

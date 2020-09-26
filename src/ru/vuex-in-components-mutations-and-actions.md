@@ -1,7 +1,10 @@
+:::tip Это руководство было написано для Vue.js 2 и Vue Test Utils v1.
+Версия для Vue.js 3 [здесь](/v3/ru).
+:::
+
 ## Мутации и действия
 
 В предыдущем руководстве обсуждалось как тестировать компоненты, которые используют `$store.state` и `$store.getters`. Оба метода дают представление о состоянии приложения. Когда проверяется, что компонент правильно вызывает мутацию или действие, мы хотим убедиться, что `$store.commit` и `$store.dispatch` вызываются с правильной функцией-обработчиком и нагрузкой.
-
 
 Есть два способа сделать это. Первый – это использовать настоящее Vuex хранилище с использованием `createLocalVue`. Второй – использовать мок для хранилища. Обе техники продемонстрированы [здесь](https://lmiller1990.github.io/vue-testing-handbook/ru/vuex-in-components.html). Давайте посмотрим на них снова, но уже в контексте мутаций и действий.
 
@@ -66,7 +69,7 @@ export default {
 
 ```js
 import Vuex from "vuex"
-import { createLocalVue, shallowMount } from "@vue/test-utils"
+import { createLocalVue, mount } from "@vue/test-utils"
 import ComponentWithButtons from "@/components/ComponentWithButtons.vue"
 
 const localVue = createLocalVue()
@@ -80,12 +83,12 @@ const store = new Vuex.Store({ mutations })
 
 describe("ComponentWithButtons", () => {
 
-  it("вызывает мутацию после клика по кнопке", () => {
-    const wrapper = shallowMount(ComponentWithButtons, {
+  it("вызывает мутацию после клика по кнопке", async () => {
+    const wrapper = mount(ComponentWithButtons, {
       store, localVue
     })
 
-    wrapper.find(".commit").trigger("click")
+    await wrapper.find(".commit").trigger("click")
 
     expect(mutations.testMutation).toHaveBeenCalledWith(
       {},
@@ -107,15 +110,15 @@ describe("ComponentWithButtons", () => {
 2. нагрузка была правильной
 
 ```js
-it("вызывает действие после клика по кнопке", () => {
+it("вызывает действие после клика по кнопке", async () => {
   const mockStore = { dispatch: jest.fn() }
-  const wrapper = shallowMount(ComponentWithButtons, {
+  const wrapper = mount(ComponentWithButtons, {
     mocks: {
       $store: mockStore 
     }
   })
 
-  wrapper.find(".dispatch").trigger("click")
+  await wrapper.find(".dispatch").trigger("click")
   
   expect(mockStore.dispatch).toHaveBeenCalledWith(
     "testAction" , { msg: "Тестовый Dispatch" })
@@ -131,15 +134,15 @@ it("вызывает действие после клика по кнопке", 
 В третьем и последнем примере посмотрим на ещё один способ тестирования того, что действие (или мутация) было вызвано с правильными аргументами. Этот способ объединяет обе техники из примеров выше: настоящее `Vuex` хранилище и использование мока для метода `dispatch`.
 
 ```js
-it("вызывает именованное действие после клика по кнопке", () => {
+it("вызывает именованное действие после клика по кнопке", async () => {
   const store = new Vuex.Store()
   store.dispatch = jest.fn()
 
-  const wrapper = shallowMount(ComponentWithButtons, {
+  const wrapper = mount(ComponentWithButtons, {
     store, localVue
   })
 
-  wrapper.find(".namespaced-dispatch").trigger("click")
+  await wrapper.find(".namespaced-dispatch").trigger("click")
 
   expect(store.dispatch).toHaveBeenCalledWith(
     'namespaced/very/deeply/testAction',

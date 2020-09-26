@@ -1,3 +1,7 @@
+:::tip This book is written for Vue.js 2 and Vue Test Utils v1.
+Find the Vue.js 3 version [here](/v3/).
+:::
+
 ## Testing Mutations
 
 Testing mutations in isolation is very straight forward, because mutations are just regular JavaScript functions. This page discusses testing mutations in isolation. If you want to test mutations in the context of a component committing a mutation, see [here](https://lmiller1990.github.io/vue-testing-handbook/vuex-in-components-mutations-and-actions.html).
@@ -6,7 +10,7 @@ The test used in the following example can be found [here](https://github.com/lm
 
 ## Creating the Mutation
 
-Mutations tend to following a set pattern. Get some data, maybe do some processing, then assign the data to the state. Here is the outline of an `ADD_POST` mutation. Once implemented, it will receive a `post` object in the payload, and add the `post.id` to `state.postIds`. It will also add the post object to the `state.posts` object, where the key is the `post.id`. This is a common pattern in apps using Vuex.
+Mutations tend to follow a set pattern. Get some data, maybe do some processing, then assign the data to the state. Here is the outline of an `ADD_POST` mutation. Once implemented, it will receive a `post` object in the payload, and add the `post.id` to `state.postIds`. It will also add the post object to the `state.posts` object, where the key is the `post.id`. This is a common pattern in apps using Vuex.
 
 We will develop it using TDD. The start of the mutation is as follows:
 
