@@ -1,18 +1,18 @@
-## Testing Computed Properties
+## Probando Computed Properties
 
-You can find the test described on this page [here](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/NumberRenderer.spec.js).
+Puedes encontrar la prueba descrita en esta página [aquí](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/NumberRenderer.spec.js).
 
-Testing computed properties are especially simple, since they are just plain old JavaScript functions.
+Probar computed properties es especialmente sencillo, ya que no son más que funciones Javascript.
 
-Let's start with looking at two different ways to test a `computed` property. We will develop a `<NumberRenderer>` component, that renders either odd or even numbers, based on a `numbers` computed property. 
+Empecemos viendo dos formas diferentes de probar una `computed` property. Vamos a desarrollar un componente `<NomberRenderer>`, que renderiza números pares o impares, basándose en una computed property llamada `numbers`.
 
-## Writing the test
+## Escribiendo la prueba
 
-The `<NumberRenderer>` component will receive an `even` prop, that is a boolean. If `even` is `true`, the component should render 2, 4, 6, and 8. If `false`, it should render 1, 3, 5, 7 and 9. The list of values will be calculated in a `computed` property called `numbers`.
+El componente `<NumberRenderer>` recibirá una prop `even`, que es un booleano. Si `even` es `true`, el componente debería mostrar 2, 4, 6 y 8. Si es `false` debería mostrar 1, 3, 5, 7 y 9. La lista de valores se calculará en una `computed` property llamada `numbers`.
 
-## Testing by rendering the value
+## Probando renderizar el valor
 
-The test:
+La prueba:
 
 ```js
 import { mount } from "@vue/test-utils"
@@ -31,9 +31,9 @@ describe("NumberRenderer", () => {
 })
 ```
 
-Before running the test, let's set up `<NumberRenderer>`:
+Antes de lanzar el test, vamos a crear `<NumberRenderer>`:
 
-```js
+```html
 <template>
   <div>
   </div>
@@ -53,7 +53,7 @@ export default {
 </script>
 ```
 
-Now we start development, and let the error messages guide our implementation. `yarn test:unit` yields:
+Ahora iniciamos el desarrollo, y dejamos que los errores guíen nuestra implementación. `yarn test:unit` devuelve:
 
 ```
 ● NumberRenderer › renders even numbers
@@ -64,7 +64,7 @@ Now we start development, and let the error messages guide our implementation. `
   Received: ""
 ```
 
-It looks like everything is hooked up correctly. Let's start implementing `numbers`:
+Parece que todo está montado correctamente. Empecemos por implementar `numbers`:
 
 ```js
 computed: {
@@ -82,7 +82,7 @@ computed: {
 }
 ```
 
-And update the template to use the new computed property:
+Y actualicemos la plantilla para que utilice la nueva `computed` property:
 
 ```html
 <template>
@@ -92,7 +92,7 @@ And update the template to use the new computed property:
 </template>
 ```
 
-`yarn test:unit` now yields:
+`yarn test:unit` ahora devuelve:
 
 ```
 FAIL  tests/unit/NumberRenderer.spec.js
@@ -109,19 +109,19 @@ FAIL  tests/unit/NumberRenderer.spec.js
   ]"
 ```
 
-The numbers are correct, but we want to render the list formatted nicely. Let's update the `return` value:
+Los números son correctos, pero queremos mostrar la lista con el formato correcto. Vamos a actualizar el valor a devolver:
 
 ```js
 return evens.join(", ")
 ```
 
-Now `yarn test:unit` passes! 
+Ahora `yarn test:unit` pasa! 
 
-## Testing with `call` 
+## Probando con `call` 
 
-We will now add a test for the case of `even: false`. This time, we will see an alternative way to test a computed property, without actually rendering the component.
+Ahora añadiremos una prueba para el caso de `even: false`. Esta vez, veremos una forma alternativa de probar una computed property, sin renderizar el componente.
 
-The test, first:
+La prueba primero:
 
 ```js
 it("renders odd numbers", () => {
@@ -131,9 +131,9 @@ it("renders odd numbers", () => {
 })
 ```
 
-Instead of rendering the component and making an assertion on `wrapper.text()`, we are using `call` to provide alternative `this` context to `numbers`. We will see what happens if we don't use `call` after we get the test to pass.
+En lugar de renderizar el componente y hacer la comprobación sobre `wrapper.text()`, utilizamos `call` para proporcionar un contexto `this` alternativo a `numbers`. Veremos qué sucede si no usamos `call` después de que hagamos que la prueba pase.
 
-Running the current test yields:
+Lanzar la prueba actual devuelve:
 
 ```
 FAIL  tests/unit/NumberRenderer.spec.js
@@ -145,7 +145,7 @@ FAIL  tests/unit/NumberRenderer.spec.js
   Received: "2, 4, 6, 8"
 ```
 
-Update `numbers`:
+Actualizamos `numbers`:
 
 
 ```js
@@ -165,7 +165,7 @@ numbers() {
 }
 ```
 
-Now both tests pass! But what if we hadn't used `call` in the second test? Try updating it like so:
+Ahora ambas pruebas pasan! Pero, ¿qué habría pasado si no hubiésemos usado `call` en la segunda prueba? Intentemos actualizarla así:
 
 ```js
 it("renders odd numbers", () => {
@@ -175,7 +175,7 @@ it("renders odd numbers", () => {
 })
 ```
 
-The test now fails:
+La prueba ahora falla:
 
 ```
 FAIL  tests/unit/NumberRenderer.spec.js
@@ -187,24 +187,24 @@ FAIL  tests/unit/NumberRenderer.spec.js
   Received: "2, 4, 6, 8"
 ```
 
-`vue` automatically binds `props` to `this`. We are not rendering the component with `mount`, though, so Vue isn't binding anything to `this`. If you do `console.log(this)`, you can see the context is simply the `computed` object:
+`vue` enlaza automáticamente las `props` con `this`. Sin embargo, no estamos renderizando el componente con `mount`, por lo que Vue no está enlazando nada con `this`. Si hacemos `console.log(this)`, podemos ver que el contexto es simplemente el objeto `computed`:
 
 ```
 { numbers: [Function: numbers] }
 ```
 
-So we need to use `call`, which lets us bind an alternative `this` object, in our case, one with a `even` property.
+Por lo que necesitamos usar `call`, que nos permite enlazar un `this` alternativo, en nuestro caso, uno con la prop `even`.
 
-## To `call` or to `mount`?
+## ¿Usar `call` o `mount`?
 
-Both techniques presented are useful for testing computed properties. Call can be useful when:
+Las dos técnicas presentadas son útiles para probar computed properties. `call` puede ser ser de utilidad cuando:
 
-- You are testing a component that does some time consuming operations in a lifecycle methods you would like to avoid executing in your computed unit test.
-- You want to stub out some values on `this`. Using `call` and passing a custom context can be useful. 
+- Estamos probando un componente que realiza operaciones que consuman mucho tiempo en los métodos de ciclo de vida que queramos evitar ejecutar en nuestra prueba.
+- Queremos usar stubs para algunos valores de `this`. Usar `call` y pasar un contexto personalizado puede ser útil.
 
-Of course, you want to make sure the value is correctly rendered as well, so make sure you choose the correct technique when testing your computed properties, and test all the edge cases.
+Por supuesto, también queremos estar seguros de que el valor se renderiza correctamente, así que debemos asegurarnos de elegir la técnica correcta para probar las computed properties, y probar todos los casos extremos.
 
-## Conclusion
+## Conclusión
 
-- computed properties can be using `mount` making assertions on the rendered markup
-- complex computed properties can be independently tested by using `call`
+- Las computed properties se pueden probar usando `mount` y haciendo comprobaciones sobre el HTML renderizad.
+- Las computed properties complejas se pueden probar independientemente usando `call`.
