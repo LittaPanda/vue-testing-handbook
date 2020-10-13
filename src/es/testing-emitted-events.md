@@ -1,14 +1,14 @@
-## Testing Emitted Events
+## Probando eventos emitidos
 
-As applications grow larger, the number of components grows as well. When these components need to share data, child components can [emit](https://vuejs.org/v2/api/#vm-emit) an event, and the parent component responds.
+A medida que las aplicaciones crecen, también crece la cantidad de componentes. Cuando estos comoponentes necesitan compartir datos, los componentes hijos pueden [emitir](https://vuejs.org/v2/api/#vm-emit) un evento, al que el componente padre responderá.
 
-`vue-test-utils` provides an `emitted` API which allows us to make assertions on emitted events. The documentation for `emitted` is found [here](https://vue-test-utils.vuejs.org/api/wrapper/emitted.html).
+`vue-test-utils` proporciona un API `emitted` que permite hacer comprobaciones sobre eventos emitidos. La documentación para `emitted` se encuentra [aquí](https://vue-test-utils.vuejs.org/api/wrapper/emitted.html).
 
-The source code for the test described on this page can be found [here](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/Emitter.spec.js).
+El código fuente para la prueba descrita en esta página se encuentra [aquí](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/Emitter.spec.js).
 
-## Write a Component and Test
+## Escribir un componente y su prueba
 
-Let's build a simple component. Create an `<Emitter>` component, and add the following code.
+Vamos a crear un componente simple. Creamos un componente `<Emitter>`, y añadimos el código siguiente:
 
 ```html
 <template>
@@ -32,7 +32,7 @@ Let's build a simple component. Create an `<Emitter>` component, and add the fol
 </style>
 ```
 
-Add a test called `emitEvent`:
+Añadimos una prueba llamada `emitEvent`:
 
 ```js
 import Emitter from "@/components/Emitter.vue"
@@ -48,9 +48,10 @@ describe("Emitter", () => {
   })
 })
 ```
-Using the [emitted API](https://vue-test-utils.vuejs.org/ja/api/wrapper/emitted.html) provided by `vue-test-utils`, we can easily see the emitted events.
 
-Run the test with `yarn test:unit`.
+Mediante el [API emitted](https://vue-test-utils.vuejs.org/ja/api/wrapper/emitted.html) proporcionada por `vue-test-utils`, podemos ver los eventos emitidos fácilmente.
+
+Ejecutemos la prueba con `yarn test:unit`.
 
 ```
 PASS  tests/unit/Emitter.spec.js
@@ -60,15 +61,15 @@ PASS  tests/unit/Emitter.spec.js
     { myEvent: [ [ 'name', 'password' ] ] }
 ```
 
-## emitted syntax
+## Sintaxis de emitted
 
-`emitted` returns an object. The emitted events are saved as properties on the object. You can inspect the events using `emitted().[event]`:
+`emitted` devuelve un objeto. Los eventos emitidos se guardan como propiedades en el objeto. Podemos inspeccionar los eventos utilizando `emitted().[event]`:
 
 ```js
 emitted().myEvent //=>  [ [ 'name', 'password' ] ]
 ```
 
-Let's try calling `emitEvent` twice.
+Probemos llamando a `emitEvent` dos veces.
 
 ```js
 it("emits an event with two arguments", () => {
@@ -81,16 +82,16 @@ it("emits an event with two arguments", () => {
 })
 ```
 
-Run the test with `yarn test:unit`:
+Ejecutemos la prueba con `yarn test:unit`:
 
 ```
 console.log tests/unit/Emitter.spec.js:11
   [ [ 'name', 'password' ], [ 'name', 'password' ] ]
 ```
 
-`emitted().emitEvent` returns an array. The first instance of `emitEvent` is accessible using with `emitted().emitEvent[0]`. The arguments are accessible using a similar syntax, `emitted().emitEvent[0][0]` and so forth. 
+`emitted().emitEvent` devuelve un array. La primera instancia de `emitEvent` es accesible usando `emitted().emitEvent[0]`. Podemos acceder a los argumentos usando una sintaxis similar: `emitted().emitEvent[0][0]`, etc. 
 
-Let's make an actual assertion against the emitted event.
+Creemos una comprobación sobre el evento emitido.
 
 
 ```js
@@ -103,11 +104,11 @@ it("emits an event with two arguments", () => {
 })
 ```
 
-The test passes.
+La prueba pasa.
 
-## Testing events without mounting the component
+## Probando eventos sin montar el componente
 
-Some times you might want to test emitted events without actually mounting the component. You can do this by using `call`. Let's write another test.
+A veces podemos querer probar eventos emitidos sin montar el componente. Podemos hacerlo usando `call`. Escribamos otra prueba.
 
 ```js
 it("emits an event without mounting the component", () => {
@@ -120,16 +121,16 @@ it("emits an event without mounting the component", () => {
 })
 ```
 
-Since `$emit` is just a JavaScript object, you can mock `$emit`, and by using `call` to attach it to the `this` context of `emitEvent`. By using `call`, you can call a method without mounting the component. 
+Ya que `$emit` es solo un objeto Javascript, podemos mockearlo, y podemos usar `call` para asociarlo al contexto `this` de `emitEvent`. Al usar `call`, podemos llamar a un método sin montar el componente. 
 
-Using `call` can be useful in situations where you have some heavy processing in lifecycle methods like `created` and `mounted` that you don't want to execute. Since you don't mount the component, the lifecycle methods are never called. It can also be useful when you want to manipulate the `this` context in a specific manner.
+Usar `call` puede ser útil en situaciones en las que tenemos algún procesamiento pesado en métodos del ciclo de vida como `created` o `mounted` que no queremos ejecutar. Ya que no montamos el componente, los métodos del ciclo de vida nunca se llaman. También puede ser útil cuando queremos manipular el contexto de `this` de una forma específica.
 
-## Conclusion
+## Conclusión
 
-- the `emitted` API from `vue-test-utils` is used to make assertions against emitted events
-- `emitted` is a method. It returns an object with properties corresponding to the emitted events
-- each property of `emitted` is an array. You can access each instance of an emitted event by using the `[0]`, `[1]` array syntax
-- the arguments of emitted events are also saved as arrays, and can accessed using the `[0]`, `[1]` array syntax
-- `$emit` can be mocked using `call`, assertions can be made without rendering the component
+- El API `emitted` de `vue-test-utils` se usa para hacer comprobaciones de eventos emitidos.
+- `emitted` es un método. Devuelve un objeto con propiedades que se corresponden con los eventos emitidos.
+- Cada propiedad de `emitted` es un arrray. Podemos acceder cada instancia de un evento emitido usando la sintaxis de arrays `[0]`, `[1]`.
+- Los argumentos de los eventos emitidos también se guardan como arrays, y se pueden usar mediante la misma sintaxis.
+- `$emit` se puede mockear usando `call`, lo que permite hacer comprobaciones sin renderizar el componente.
 
-The source code for the test described on this page can be found [here](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/Emitter.spec.js).
+El código fuente para las pruebas descritas en esta página se puede encontrar [aquí](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/Emitter.spec.js).
