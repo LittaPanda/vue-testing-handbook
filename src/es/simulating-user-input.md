@@ -1,14 +1,14 @@
-## Triggering Events
+## Lanzando eventos
 
-One of the most common things your Vue components will be doing is listening for inputs from the user. `vue-test-utils` and Jest make it easy to test inputs. Let's take a look at how to use `trigger` and Jest mocks to verify our components are working correctly.
+Una de las cosas más habituales que harán nuestros componentes de Vue será esperar la entrada del usuario. `vue-test-utils` y Jest facilitan probar dicha entrada. Veamos cómo usar `trigger` y los mocks de Jest para verificar que nuestros componentes funcionan correctamente.
 
-The source code for the test described on this page can be found [here](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/FormSubmitter.spec.js).
+El código fuente para la prueba descrita en esta página se puede encontrar [aquí](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/FormSubmitter.spec.js).
 
-## Creating the component
+## Creación del componente
 
-We will create a simple form component, `<FormSubmitter>`, that contains an `<input>` and a `<button>`. When the button is clicked, something should happen. The first example will simply reveal a success message, then we will move on to a more interesting example that submits the form to an external endpoint.
+Crearemos un componente de formulario simple, `<FormSubmitter>`, que contiene un `<input>` y un `<button>`. Cuando se pulse el botón debería suceder algo. El primer ejemplo simplemente mostrará un mensaje de éxito. A continuación, seguiremos con un ejemplo más interesante que envía el formulario a un endpoint externo.
 
-Create a `<FormSubmitter>` and enter the template:
+Cree `<FormSubmitter>` e introduzca la plantilla:
 
 ```html
 <template>
@@ -28,9 +28,9 @@ Create a `<FormSubmitter>` and enter the template:
 </template>
 ```
 
-When the user submits the form, we will reveal a message thanking them for their submission. We want to submit the form asynchronously, so we are using `@submit.prevent` to prevent the default action, which is to refresh the page when the form is submitted.
+Cuando el usuario envíe el formulario, mostraremos un mensaje agradeciéndole su envío. Queremos enviar el formulario asíncronamente, por lo que usamos `@submit.prevent` para evitar la acción por defecto, que consiste en refrescar la página cuando se envía el formulario.
 
-Now add the form submission logic:
+Ahora, añada la lógica de envío del formulario:
 
 ```html
 <script>
@@ -53,11 +53,11 @@ Now add the form submission logic:
 </script>
 ```
 
-Pretty simple, we just set `submitted` to be `true` when the form is submitted, which in turn reveals the `<div>` containing the success message.
+Bastante simple: cambiamos `submitted` a `true` cuando se envía el formulario, lo que mostrará el `<div>` que contiene el mensaje de éxito.
 
-## Writing the test
+## Escribiendo la prueba
 
-Let's see a test. We are marking this test as `async` - read on to find out why.
+Veamos una prueba. Estamos marcándola como `async` – siga leyendo para ver por qué.
 
 ```js
 import { shallowMount } from "@vue/test-utils"
@@ -77,27 +77,27 @@ describe("FormSubmitter", () => {
 })
 ```
 
-This test is fairly self explanatory. We `shallowMount` the component, set the username and use the `trigger` method `vue-test-utils` provides to simulate user input. `trigger` works on custom events, as well as events that use modifiers, like `submit.prevent`, `keydown.enter`, and so on.
+Esta prueba es bastante autoexplicativa. Montamos el componente mediante `shallowMount`, damos valor al nombre de usuario y usamos el método `trigger` que proporciona `vue-test-utils` para simular la entrada del usuario. `trigger` funciona en eventos personalizado, así como con eventos que usan modificadores, como `submit.prevent`, `keydown.enter`, etc.
 
-Notice after calling `trigger`, we do `await wrapper.vm.$nextTick()`. This is why we had to mark the test as `async` - so we can use `await`. As of `vue-test-utils` beta 28, you need to call `nextTick` to ensure Vue's reactivity system updates the DOM. Sometimes you can get away without calling `nextTick`, but if you components start to get complex, you can hit a race condition and your assertion might run before Vue has updated the DOM. You can read more about this in the official [vue-test-utils documentation](https://vue-test-utils.vuejs.org/guides/#updates-applied-by-vue).
+Nótese que después de llamar a `trigger`, hacemos `await wrapper.vm.$nextTick()`. Este es el motivo por el que hemos tenido que marcar la prueba como `async`: para poder usar `await`. Desde `vue-test-utils` beta 28, es necesario llamar a `nextTick` para asegurarnos de que el sistema de reactividad de vue actualiza el DOM. A veces no llamar a `nextTick` puede funcionar, pero si nuestros componentes empiezan a ganar complejidad, podemos encontrarnos con una condición de carrera y nuestra comprobación podría ejecutarse antes de que Vue haya actualizado el DOM. Puede leer más sobre esto en la [documentación oficial de vue-test-utils](https://vue-test-utils.vuejs.org/guides/#updates-applied-by-vue).
 
-The above test also follows the three steps of unit testing:
+La prueba anterior también sigue los tres pasos de las pruebas unitarias:
 
-1. arrange (set up for the test. In our case, we render the component).
-2. act (execute actions on the system)
-3. assert (ensure the actual result matches your expectations)
+1. Preparar (configurar todo para la prueba. En nuestro caso, renderizamos el componente)
+2. Actuar (ejecutar acciones en el sistema)
+3. Comprobar (asegurarse de que el resultado encaja con lo que esperamos)
 
-We separate each step with a newline as it makes tests more readable.
+Separamos cada paso con una nueva línea para que la prueba sea más legible.
 
-Run this test with `yarn test:unit`. It should pass.
+Ejecute esta prueba con `yarn test:unit`. Debería pasar.
 
-Trigger is very simple - use `find` to get the element you want to simulate some input, and call `trigger` with the name of the event, and any modifiers.
+`trigger` es muy simple – utilizamos `find` para obtener el elemento en el que queremos simular una entrada, y llamamos a `trigger` con el nombre del evento junto con cualquier modificador. 
 
-## A real world example
+## Un ejemplo real
 
-Forms are usually submitted to some endpoint. Let's see how we might test this component with a different implementation of `handleSubmit`. One common practise is to alias your HTTP library to `Vue.prototype.$http`. This allows us to make an ajax request by simply calling `this.$http.get(...)`. Learn more about this practice [here](https://vuejs.org/v2/cookbook/adding-instance-properties.html). 
+Los formularios se suelen enviar a algún endpoint. Veamos cómo podemos probar este componente con una implementación diferente para `handleSubmit`. Una práctica habitual es crear un alias de nuestra librería HTTP a `Vue.prototype.$http`. Esto nos permite hacer peticiones AJAX llamando a `this.$http.get(...)`. Más información sobre esta práctia [aquí](https://vuejs.org/v2/cookbook/adding-instance-properties.html). 
 
-Often the http library is, `axios`, a popular HTTP client. In this case, our `handleSubmit` would likely look something like this:
+A menudo la librería HTTP es `axios`, un cliente HTTP popular. En este caso, nuestro `handleSubmit` probablemente sería así:
 
 ```js
 handleSubmitAsync() {
@@ -111,7 +111,7 @@ handleSubmitAsync() {
 }
 ```
 
-In this case, one technique is to _mock_ `this.$http` to create the desired testing environment. You can read about the `mocks` mounting option [here](https://vue-test-utils.vuejs.org/api/options.html#mocks). Let's see a mock implementation of a `http.get` method:
+En este caso, una técnica es _mockear_ `this.$http` para crear el entorno de pruebas deseado. Podemos ver más acerca de la opción `mocks` [aquí](https://vue-test-utils.vuejs.org/api/options.html#mocks). Veamos una implementación de un mock para un método `http.get`:
 
 ```js
 let url = ''
@@ -128,12 +128,12 @@ const mockHttp = {
 }
 ```
 
-There are a few interesting things going on here:
+Aquí suceden unas cuantas cosas interesantes:
 
-- we create a `url` and `data` variable to save the `url` and `data` passed to `$http.get`. This is useful to assert the request is hitting the correct endpoint, with correct payload.
-- after assigning the `url` and `data` arguments, we immediately resolve the Promise, to simulate a successful API response.
+- Creamos unas variables `url` y `data` para guardar la `url` y `data` pasadas a `$http.get`. Esto es útil para comprobar que la petición está llegando al endpoint correcto, con la información correcta.
+- Tras asignar los parámetros `url` y `data`, inmediatamente resolvemos la promesa, para simular una respuesta exitosa del API.
 
-Before seeing the test, here is the new `handleSubmitAsync` function:
+Antes de ver la prueba, aquí está la nueva función `handleSubmitAsync`:
 
 ```js
 methods: {
@@ -149,7 +149,7 @@ methods: {
 }
 ```
 
-Also, update `<template>` to use the new `handleSubmitAsync` method:
+También actualizamos la `<template>` para que use el nuevo método `handleSubmitAsync`:
 
 ```html
 <template>
@@ -164,11 +164,11 @@ Also, update `<template>` to use the new `handleSubmitAsync` method:
 </template>
 ```
 
-Now, only the test.
+Ahora, la prueba.
 
-## Mocking an ajax call
+## Mockear una llamada AJAX
 
-First, include the mock implementation of `this.$http` at the top, before the `describe` block:
+Primero, incluimos la implementación mockeada de `this.$http` en la parte superior, antes del bloque `describe`:
 
 ```js
 let url = ''
@@ -185,7 +185,7 @@ const mockHttp = {
 }
 ```
 
-Now, add the test, passing the mock `$http` to the `mocks` mounting option:
+Ahora, añadimos la prueba, pasando el `$http` mockeado a la opción de montado `mocks`:
 
 ```js
 it("reveals a notification when submitted", () => {
@@ -203,9 +203,9 @@ it("reveals a notification when submitted", () => {
 })
 ```
 
-Now, instead of using whatever real http library is attached to `Vue.prototype.$http`, the mock implementation will be used instead. This is good - we can control the environment of the test and get consistent results.
+Ahora, en lugar de usar la librería HTTP real que esté asignada a `Vue.prototype.$http`, se usará la implementación mockeada. Esto es bueno: podemos controlar el entorno de la prueba y obtener resultados consistentes.
 
-Running `yarn test:unit` actually yields a failing test:
+Ejecutar `yarn test:unit` devuelve una prueba fallida:
 
 ```sh
 FAIL  tests/unit/FormSubmitter.spec.js
@@ -214,7 +214,7 @@ FAIL  tests/unit/FormSubmitter.spec.js
     [vue-test-utils]: find did not return .message, cannot call text() on empty Wrapper
 ```
 
-What is happening is that the test is finishing _before_ the promise returned by `mockHttp` resolves. We can make the test async like this:
+Lo que está sucediendo es que la prueba está terminando _antes_ de que la promesa devuelta por `mockHttp` se resuelva. Podemos hacer que la prueba se `async` así:
 
 ```js
 it("reveals a notification when submitted", async () => {
@@ -222,7 +222,7 @@ it("reveals a notification when submitted", async () => {
 })
 ```
 
-However, the test will still finish before the promise resolves. One way to work around this is to use [flush-promises](https://www.npmjs.com/package/flush-promises), a simple Node.js module that will immediately resolve all pending promises. Install it with `yarn add flush-promises`, and update the test as follows:
+Sin embargo, la prueba seguirá terminando antes de que la promesa se resuelva. Una forma de solucionar esto es usar [flush-promises](https://www.npmjs.com/package/flush-promises), un módulo Node.js simple que inmediatamente resolverá todas las promesas pendientes. Lo podemos instalar con `yarn add flus-promises`, y a continuación actualizamos la prueba así:
 
 ```js
 import flushPromises from "flush-promises"
@@ -245,11 +245,11 @@ it("reveals a notification when submitted", async () => {
 })
 ```
 
-Using `flush-promises` has the nice side effect of ensuring all the promises, including `nextTick` have resolved, and Vue has updated the DOM.
+Utilizar `flush-promises` tiene la ventaja adicional de asegurarse de que todas las promesas, incluyendo `nextTick` se han resuelto, y de que Vue ha actualizado el DOM.
 
-Now the test passes. The source code for `flush-promises` is only about 10 lines long, if you are interested in Node.js it is worth reading and understanding how it works.
+Ahora la prueba pasa. El código fuente de `flush-promises` es solo de unas 10 líneas. Si le interesa Node.js merece la pena leerlo y entender cómo funciona.
 
-We should also make sure the endpoint and payload are correct. Add two more assertions to the test:
+También deberíamos asegurarnos de que el endpoint y los datos enviados son correctos. Añadamos dos comprobaciones más a la prueba:
 
 ```js
 // ...
@@ -257,16 +257,16 @@ expect(url).toBe("/api/v1/register")
 expect(data).toEqual({ username: "alice" })
 ```
 
-The test still passes.
+La prueba sigue pasando.
 
-## Conclusion
+## Conclusión
 
-In this section, we saw how to:
+En este apartado, vimos cómo:
 
-- use `trigger` on events, even ones that use modifiers like `prevent`
-- use `setValue` to set a value of an `<input>` using `v-model`
-- write tests using the three steps of unit testing
-- mock a method attached to `Vue.prototype` using the `mocks` mounting option
-- how to use `flush-promises` to immediately resolve all promises, a useful technique in unit testing
+- Utilizar `trigger` para lanzar eventos, incluso los que tienen modificadores como `prevent`.
+- Utilizar `setValue` para darle valor a un `<input>` usando `v-model`.
+- Escribir pruebas usando los tres pasos de las pruebas unitarias.
+- Mockear un método de `Vue.prototype` usando la opción de montado `mocks`.
+- Cómo usar `flush-promises` para resolver inmediatamente todas las promesas, una técnica útil en las pruebas unitarias.
 
-The source code for the test described on this page can be found [here](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/FormSubmitter.spec.js).
+El código fuente para la prueba descrita en esta página se encuentra [aquí](https://github.com/lmiller1990/vue-testing-handbook/tree/master/demo-app/tests/unit/FormSubmitter.spec.js).
