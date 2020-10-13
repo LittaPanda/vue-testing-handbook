@@ -1,8 +1,8 @@
-## Two ways to render
+## Dos formas de renderizar
 
-`vue-test-utils` provides two ways to render, or __mount__ a component - `mount` and `shallowMount`. A component mounted using either of these methods returns a `wrapper`, which is an object containing the Vue component, plus some useful methods for testing.
+`vue-test-utils` proporciona dos formas de renderizar, o montar (__mount__) un componente: `mount` y `shallowMount`. Un componente montado utilizando cualquiera de estos métodos devuelve un `wrapper`, que es un objeto que contiene el componente de Vue, además de algunos métodos útiles para las pruebas.
 
-Let's start off with two simple components:
+Empecemos con dos componentes simples:
 
 ```js
 const Child = Vue.component("Child", {
@@ -18,7 +18,7 @@ const Parent = Vue.component("Parent", {
 })
 ```
 
-Let's start off by rendering `Child` and calling the `html` method `vue-test-utils` provides to inspect the markup.
+Empezaremos renderizando `Child` y llamando al método `html` que proporciona `vue-test-utils` para inspeccionar el HTML resultante.
 
 ```js
 const shallowWrapper = shallowMount(Child)
@@ -28,13 +28,13 @@ console.log(shallowWrapper.html())
 console.log(mountWrapper.html())
 ```
 
-Both `mountWrapper.html()` and `shallowWrapper.html()` yield the following output:
+Tanto `mountWrapper.html()` como `shallowWrapper.html()` devuelven el siguiente resultado:
 
 ```html
 <div>Child component</div>
 ```
 
-No difference here. How about with `Parent`?
+No hay ninguna diferencia aquí. ¿Qué hay de `Parent`?
 
 ```js
 const shallowWrapper = shallowMount(Parent)
@@ -44,23 +44,23 @@ console.log(shallowWrapper.html())
 console.log(mountWrapper.html())
 ```
 
-`mountWrapper.html()` now yields:
+`mountWrapper.html()` ahora devuelve:
 
 ```html
 <div><div>Child component</div></div>
 ```
 
-Which is the completely rendered markup of `Parent` and `Child`. `shallowWrapper.html()`, on the other hand, produces this:
+Que es el HTML de `Parent` y `Child` completamente renderizado. `shallowWrapper.html()`, en cambio, produce esto:
 
 ```html
 <div><vuecomponent-stub></vuecomponent-stub></div>
 ```
 
-The place where `<Child />` should be has been replaced by `<vuecomponent-stub />`. `shallowMount` renders regular html elements, but replaces Vue components with a stub.
+`<Child />` ha sido reemplazado por `<vuecomponent-stub />`. `shallowMount` renderiza los elementos HTML, pero reemplaza los componentes de Vue con un stub.
 
-> A stub is kind of a "fake" object that stands in for a real one.
+> Un stub es un tipo de objeto "fake" que se utiliza para reemplazar uno real.
 
-This can be useful. Imagine you want to test your `App.vue` component, that looks like this:
+Esto puede ser útil. Imagine que quiere probar su componente `App.vue`, que se ve así:
 
 ```vue
 <template>
@@ -71,6 +71,6 @@ This can be useful. Imagine you want to test your `App.vue` component, that look
 </template>
 ```
 
-And we want to test `<h1>My Vue App</h1>`  is rendered correctly. We also have a `<fetch-data>` component, that makes a request to an external API in its `mounted` lifecycle hook. 
+Y quiere probar que `<h1>My Vue App</h1>` se renderiza correctamente. También tenemos un componente `<fetch-data>`, que hace una petición a un API externa en su hook de ciclo de vida `mounted`.
 
-If we use `mount`, although all we want to do is assert some text is rendered, `<fetch-data />` will make an API request. This will make our test slow and prone to failure. So, we stub out external dependencies. By using `shallowMount`, `<fetch-data />` will be replaced with a `<vuecomponent-stub />`, and the API call will not be initiated.
+Si usamos `mount`, a pesar de que todo lo que queremos es comprobar que cierto texto se renderiza, `<fetch-data />` hará una petición al API. Esto hará que nuestra prueba sea lenta y propensa a errores. Por ese motivo, reemplazamos nuestras dependencias por stubs. Al usar `shallowMount`, `<fetch-data />` será reemplazado por un `<vuecomponent-stub />`, y la llamada al API no se realizará.
